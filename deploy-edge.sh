@@ -23,7 +23,6 @@ sudo apt-get update
 sudo apt-get install aziot-edge
 
 # Step 4: Configure Your IoT Edge Device
-sudo cp /etc/aziot/config.toml.edge.template /etc/aziot/config.toml
 
 # Prompt the user for input
 read -p "Enter your IoT Hub hostname: " IOTHUB_HOSTNAME
@@ -31,11 +30,19 @@ read -p "Enter your device ID: " DEVICE_ID
 read -p "Enter the path to your device identity certificate: " CERTIFICATE_PATH
 read -p "Enter the path to your device identity private key: " PRIVATE_KEY_PATH
 
-# Use 'sed' to replace the placeholders with user input
-sudo sed -i "s|REQUIRED_IOTHUB_HOSTNAME|${IOTHUB_HOSTNAME}|" /etc/aziot/config.toml
-sudo sed -i "s|REQUIRED_DEVICE_ID_PROVISIONED_IN_IOTHUB|${DEVICE_ID}|" /etc/aziot/config.toml
-sudo sed -i "s|REQUIRED_URI_OR_POINTER_TO_DEVICE_IDENTITY_CERTIFICATE|${CERTIFICATE_PATH}|" /etc/aziot/config.toml
-sudo sed -i "s|REQUIRED_URI_TO_DEVICE_IDENTITY_PRIVATE_KEY|${PRIVATE_KEY_PATH}|" /etc/aziot/config.toml
+# Create the IoT Edge configuration file with the correct layout and user input
+cat <<EOF | sudo tee /etc/aziot/config.toml
+# Manual provisioning with x.509 certificates
+[provisioning]
+source = "manual"
+iothub_hostname = "$IOTHUB_HOSTNAME"
+device_id = "$DEVICE_ID"
+
+[provisioning.authentication]
+method = "x509"
+identity_cert = "$CERTIFICATE_PATH"
+identity_pk = "$PRIVATE_KEY_PATH"
+EOF
 
 # Step 5: Apply the Configuration
 read -p "Press Enter to apply the configuration..."
