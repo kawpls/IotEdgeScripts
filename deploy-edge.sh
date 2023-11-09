@@ -33,15 +33,15 @@ read -p "Enter the path to your device identity private key: " PRIVATE_KEY_PATH
 # Create the IoT Edge configuration file with the correct layout and user input
 cat <<EOF | sudo tee /etc/aziot/config.toml
 # Manual provisioning with x.509 certificates
-[provisioning]
-source = "manual"
-iothub_hostname = "$IOTHUB_HOSTNAME"
-device_id = "$DEVICE_ID"
+ [provisioning]
+ source = "manual"
+ iothub_hostname = "$IOTHUB_HOSTNAME"
+ device_id = "$DEVICE_ID"
 
-[provisioning.authentication]
-method = "x509"
-identity_cert = "$CERTIFICATE_PATH"
-identity_pk = "$PRIVATE_KEY_PATH"
+ [provisioning.authentication]
+ method = "x509"
+ identity_cert = "$CERTIFICATE_PATH"
+ identity_pk = "$PRIVATE_KEY_PATH"
 EOF
 
 # Step 5: Apply the Configuration
