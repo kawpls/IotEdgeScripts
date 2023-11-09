@@ -38,8 +38,8 @@ cat <<EOF | sudo tee /etc/aziot/config.toml
  device_id = "$DEVICE_ID"
  [provisioning.authentication]
  method = "x509"
- identity_pk = "file://$CERTIFICATE_PATH"
- identity_cert = "file://$PRIVATE_KEY_PATH"
+ identity_pk = "file://$PRIVATE_KEY_PATH"
+ identity_cert = "file://$CERTIFICATE_PATH"
 EOF
 
 # Step 5: Apply the Configuration
